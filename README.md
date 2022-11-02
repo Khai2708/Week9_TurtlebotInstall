@@ -77,3 +77,18 @@ asadbek@ubuntu:~/turtlebot_install$ source ~/.bashrc
 asadbek@ubuntu:~/turtlebot_install$ ..
 
 ```
+#### SBC setup
+```
+> Prepare microSD Card and Reader and Download TurtleBot3 SBC Image
+> Unzip the downloaded image file
+> Burn the image file
+> Raspberry Pi Imager Installation
+> Disks Utility
+> Resize the Partition
+> Configure the WiFi Network Setting
+> ROS2 Network Configuration 
+... ROS_DOMAIN_ID=12 #TURTLEBOT3
+
+> NEW LDS-02 Configuration
+-----------------------------------------------------------------
+```
