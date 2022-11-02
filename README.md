@@ -79,7 +79,8 @@ asadbek@ubuntu:~/turtlebot_install$ ..
 ```
 #### SBC setup
 ```
-> Prepare microSD Card and Reader and Download TurtleBot3 SBC Image
+> Prepare microSD Card and Reader
+> Download TurtleBot3 SBC Image
 > Unzip the downloaded image file
 > Burn the image file
 > Raspberry Pi Imager Installation
