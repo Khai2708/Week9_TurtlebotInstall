@@ -91,5 +91,11 @@ asadbek@ubuntu:~/turtlebot_install$ ..
 ... ROS_DOMAIN_ID=12 #TURTLEBOT3
 
 > NEW LDS-02 Configuration
+ > Install the LDS-02 driver and update TurtleBot3 package
+ > Export the LDS_MODEL to the bashrc file. Depending on your LDS model, LDS-01 or LDS-02
+ 
 -----------------------------------------------------------------
 ```
+![image](https://user-images.githubusercontent.com/90145797/201809086-5ef008f9-014b-4a36-a592-fa28145040bb.png)
+![image](https://user-images.githubusercontent.com/90145797/201809271-f4aaeaf8-b76b-4df6-b716-b4477dc3dce8.png)
+
