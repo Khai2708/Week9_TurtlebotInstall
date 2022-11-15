@@ -1,4 +1,4 @@
-# Week 9-10 Turtlebot3 installation
+# Week 9,10,11 Turtlebot3 installation(Foxy version)
 #### 1.Setup PC
 ```
 > Install ROS 2 on Remote PC
