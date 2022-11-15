@@ -1,5 +1,5 @@
 # Week 9-10 Turtlebot3 installation
-#### Setup PC
+#### 1.Setup PC
 ```
 > Install ROS 2 on Remote PC
 ----------------------------------------------------------------------------
@@ -77,7 +77,7 @@ asadbek@ubuntu:~/turtlebot_install$ source ~/.bashrc
 asadbek@ubuntu:~/turtlebot_install$ ..
 
 ```
-#### SBC setup
+#### 2.SBC setup
 ```
 > Prepare microSD Card and Reader
 > Download TurtleBot3 SBC Image
@@ -87,11 +87,11 @@ asadbek@ubuntu:~/turtlebot_install$ ..
 ```
 ![rpi_imager](https://user-images.githubusercontent.com/90145797/201824177-362652b5-69aa-401f-bf12-bd2c824b07e9.gif)
 
-#### Disks Utility
+##### Disks Utility
 ![disks](https://user-images.githubusercontent.com/90145797/201824350-20ff289e-14a7-4890-8c04-ced33a7199f2.gif)
 
 
-#### Resize the Partition
+##### Resize the Partition
 ![gparted](https://user-images.githubusercontent.com/90145797/201824508-7aeaa336-50bd-42c4-932d-dda27ff8b4ef.gif)
 
 ```
@@ -126,4 +126,139 @@ asadbek@ubuntu:   $ echo 'export LDS_MODEL=LDS-02' >> ~/.bashrc
 asadbek@ubuntu:  $ source ~/.bashrc
  
 -----------------------------------------------------------------
+```
+
+#### 3.OpenCR setup
+```
+> Connect the OpenCR to the Rasbperry Pi using the micro USB cable.
+> Install required packages on the Raspberry Pi to upload the OpenCR firmware. 
+
+$ sudo dpkg --add-architecture armhf
+$ sudo apt update
+$ sudo apt install libc6:armhf
+
+> Depending on the platform, use either burger or waffle for the OPENCR_MODEL name. 
+$ export OPENCR_PORT=/dev/ttyACM0
+$ export OPENCR_MODEL=burger
+$ rm -rf ./opencr_update.tar.bz2
+
+> Download the firmware and loader, then extract the file. 
+$ wget https://github.com/ROBOTIS-GIT/OpenCR-Binaries/raw/master/turtlebot3/ROS2/latest/opencr_update.tar.bz2
+$ tar -xjf ./opencr_update.tar.bz2
+
+> Upload firmware to the OpenCR.
+$ cd ~/opencr_update
+$ ./update.sh $OPENCR_PORT $OPENCR_MODEL.opencr
+```
+##### A successful firmware upload for TurtleBot3 burger
+![image](https://user-images.githubusercontent.com/90145797/201826172-685b68b0-7b41-400e-aad0-f5c1c118b0a2.png)
+
+#### 4. Bring up
+```
+> Bringup TurtleBot3
+ > Open a new terminal from PC and connect to Raspberry Pi with its IP address.
+$ ssh ubuntu@{IP_ADDRESS_OF_RASPBERRY_PI}
+
+ > Bring up basic packages to start TurtleBot3 applications.
+$ export TURTLEBOT3_MODEL=burger
+$ ros2 launch turtlebot3_bringup robot.launch.py
+
+ > TurtleBot3 model is burger and the terminal will print below messages.
+$ export TURTLEBOT3_MODEL=burger
+$ ros2 launch turtlebot3_bringup robot.launch.py
+[INFO] [launch]: All log files can be found below /home/ubuntu/.ros/log/2019-08-19-01-24-19-009803-ubuntu-15310
+[INFO] [launch]: Default logging verbosity is set to INFO
+urdf_file_name : turtlebot3_burger.urdf
+[INFO] [robot_state_publisher-1]: process started with pid [15320]
+[INFO] [hlds_laser_publisher-2]: process started with pid [15321]
+[INFO] [turtlebot3_ros-3]: process started with pid [15322]
+[robot_state_publisher-1] Initialize urdf model from file: /home/ubuntu/turtlebot_ws/install/turtlebot3_description/share/turtlebot3_description/urdf/turtlebot3_burger.urdf
+[robot_state_publisher-1] Parsing robot urdf xml string.
+[robot_state_publisher-1] Link base_link had 5 children
+[robot_state_publisher-1] Link caster_back_link had 0 children
+[robot_state_publisher-1] Link imu_link had 0 children
+[robot_state_publisher-1] Link base_scan had 0 children
+[robot_state_publisher-1] Link wheel_left_link had 0 children
+[robot_state_publisher-1] Link wheel_right_link had 0 children
+[robot_state_publisher-1] got segment base_footprint
+[robot_state_publisher-1] got segment base_link
+[robot_state_publisher-1] got segment base_scan
+[robot_state_publisher-1] got segment caster_back_link
+[robot_state_publisher-1] got segment imu_link
+[robot_state_publisher-1] got segment wheel_left_link
+[robot_state_publisher-1] got segment wheel_right_link
+[turtlebot3_ros-3] [INFO] [turtlebot3_node]: Init TurtleBot3 Node Main
+[turtlebot3_ros-3] [INFO] [turtlebot3_node]: Init DynamixelSDKWrapper
+[turtlebot3_ros-3] [INFO] [DynamixelSDKWrapper]: Succeeded to open the port(/dev/ttyACM0)!
+[turtlebot3_ros-3] [INFO] [DynamixelSDKWrapper]: Succeeded to change the baudrate!
+[robot_state_publisher-1] Adding fixed segment from base_footprint to base_link
+[robot_state_publisher-1] Adding fixed segment from base_link to caster_back_link
+[robot_state_publisher-1] Adding fixed segment from base_link to imu_link
+[robot_state_publisher-1] Adding fixed segment from base_link to base_scan
+[robot_state_publisher-1] Adding moving segment from base_link to wheel_left_link
+[robot_state_publisher-1] Adding moving segment from base_link to wheel_right_link
+[turtlebot3_ros-3] [INFO] [turtlebot3_node]: Start Calibration of Gyro
+[turtlebot3_ros-3] [INFO] [turtlebot3_node]: Calibration End
+[turtlebot3_ros-3] [INFO] [turtlebot3_node]: Add Motors
+[turtlebot3_ros-3] [INFO] [turtlebot3_node]: Add Wheels
+[turtlebot3_ros-3] [INFO] [turtlebot3_node]: Add Sensors
+[turtlebot3_ros-3] [INFO] [turtlebot3_node]: Succeeded to create battery state publisher
+[turtlebot3_ros-3] [INFO] [turtlebot3_node]: Succeeded to create imu publisher
+[turtlebot3_ros-3] [INFO] [turtlebot3_node]: Succeeded to create sensor state publisher
+[turtlebot3_ros-3] [INFO] [turtlebot3_node]: Succeeded to create joint state publisher
+[turtlebot3_ros-3] [INFO] [turtlebot3_node]: Add Devices
+[turtlebot3_ros-3] [INFO] [turtlebot3_node]: Succeeded to create motor power server
+[turtlebot3_ros-3] [INFO] [turtlebot3_node]: Succeeded to create reset server
+[turtlebot3_ros-3] [INFO] [turtlebot3_node]: Succeeded to create sound server
+[turtlebot3_ros-3] [INFO] [turtlebot3_node]: Run!
+[turtlebot3_ros-3] [INFO] [diff_drive_controller]: Init Odometry
+[turtlebot3_ros-3] [INFO] [diff_drive_controller]: Run!
+```
+##### Topic list
+```
+$ ros2 topic list
+/battery_state
+/cmd_vel
+/imu
+/joint_states
+/magnetic_field
+/odom
+/parameter_events
+/robot_description
+/rosout
+/scan
+/sensor_state
+/tf
+/tf_static
+```
+##### Service list
+```
+$ ros2 service list
+/diff_drive_controller/describe_parameters
+/diff_drive_controller/get_parameter_types
+/diff_drive_controller/get_parameters
+/diff_drive_controller/list_parameters
+/diff_drive_controller/set_parameters
+/diff_drive_controller/set_parameters_atomically
+/hlds_laser_publisher/describe_parameters
+/hlds_laser_publisher/get_parameter_types
+/hlds_laser_publisher/get_parameters
+/hlds_laser_publisher/list_parameters
+/hlds_laser_publisher/set_parameters
+/hlds_laser_publisher/set_parameters_atomically
+/launch_ros/describe_parameters
+/launch_ros/get_parameter_types
+/launch_ros/get_parameters
+/launch_ros/list_parameters
+/launch_ros/set_parameters
+/launch_ros/set_parameters_atomically
+/motor_power
+/reset
+/sound
+/turtlebot3_node/describe_parameters
+/turtlebot3_node/get_parameter_types
+/turtlebot3_node/get_parameters
+/turtlebot3_node/list_parameters
+/turtlebot3_node/set_parameters
+/turtlebot3_node/set_parameters_atomically
 ```
