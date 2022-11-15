@@ -84,18 +84,46 @@ asadbek@ubuntu:~/turtlebot_install$ ..
 > Unzip the downloaded image file
 > Burn the image file
 > Raspberry Pi Imager Installation
-> Disks Utility
-> Resize the Partition
+```
+![rpi_imager](https://user-images.githubusercontent.com/90145797/201824177-362652b5-69aa-401f-bf12-bd2c824b07e9.gif)
+
+#### Disks Utility
+![disks](https://user-images.githubusercontent.com/90145797/201824350-20ff289e-14a7-4890-8c04-ced33a7199f2.gif)
+
+
+#### Resize the Partition
+![gparted](https://user-images.githubusercontent.com/90145797/201824508-7aeaa336-50bd-42c4-932d-dda27ff8b4ef.gif)
+
+```
 > Configure the WiFi Network Setting
+
+asadbek@ubuntu: $ cd /media/$USER/writable/etc/netplan
+asadbek@ubuntu: $ sudo nano 50-cloud-init.yaml
+```
+![image](https://user-images.githubusercontent.com/90145797/201824789-92dd6ae8-4ee9-4f07-a12b-4329cb85cadf.png)
+
+```
 > ROS2 Network Configuration 
+he default ROS Domain ID for TurtleBot3 is set to 30 in the *.bashrc* file.
 ... ROS_DOMAIN_ID=12 #TURTLEBOT3
 
 > NEW LDS-02 Configuration
  > Install the LDS-02 driver and update TurtleBot3 package
+  
+asadbek@ubuntu:  $ sudo apt update
+asadbek@ubuntu:  $ sudo apt install libudev-dev
+asadbek@ubuntu:  $ cd ~/turtlebot3_ws/src
+asadbek@ubuntu:  $ git clone -b ros2-devel https://github.com/ROBOTIS-GIT/ld08_driver.git
+asadbek@ubuntu:  $ cd ~/turtlebot3_ws/src/turtlebot3 && git pull
+asadbek@ubuntu:  $ rm -r turtlebot3_cartographer turtlebot3_navigation2
+asadbek@ubuntu:  $ cd ~/turtlebot3_ws && colcon build --symlink-install
+
+
+  
  > Export the LDS_MODEL to the bashrc file. Depending on your LDS model, LDS-01 or LDS-02
+ 
+asadbek@ubuntu:   $ echo 'export LDS_MODEL=LDS-02' >> ~/.bashrc
+asadbek@ubuntu:  $ source ~/.bashrc
  
 -----------------------------------------------------------------
 ```
-![image](https://user-images.githubusercontent.com/90145797/201809086-5ef008f9-014b-4a36-a592-fa28145040bb.png)
-![image](https://user-images.githubusercontent.com/90145797/201809271-f4aaeaf8-b76b-4df6-b716-b4477dc3dce8.png)
-
