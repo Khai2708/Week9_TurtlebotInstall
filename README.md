@@ -159,7 +159,7 @@ $ ./update.sh $OPENCR_PORT $OPENCR_MODEL.opencr
  > Open a new terminal from PC and connect to Raspberry Pi with its IP address.
 $ ssh ubuntu@{IP_ADDRESS_OF_RASPBERRY_PI}
 
- > Bring up basic packages to start TurtleBot3 applications.
+#Bring up basic packages to start TurtleBot3 applications.
 $ export TURTLEBOT3_MODEL=burger
 $ ros2 launch turtlebot3_bringup robot.launch.py
 
@@ -261,4 +261,225 @@ $ ros2 service list
 /turtlebot3_node/list_parameters
 /turtlebot3_node/set_parameters
 /turtlebot3_node/set_parameters_atomically
+```
+
+#### Autonomous Driving
+##### Getting Started
+```
+> Install Autorace Packages
+#Install AutoRace package on both Remote PC and SBC
+$ cd ~/catkin_ws/src/
+$ git clone -b kinetic-devel https://github.com/ROBOTISGIT/turtlebot3_autorace_2020.git
+$ cd ~/catkin_ws && catkin_make
+
+#Install additional dependent packages on Remote PC
+$ sudo apt-get install ros-kinetic-image-transport ros-kinetic-cv-bridge ros-kinetic-vision-opencv python-opencv libopencv-dev ros-kinetic-image-proc
+
+```
+##### Camera Calibration
+```
+> Camera Imaging Calibration
+#Launch roscore on Remote PC
+$ roscore
+
+#Trigger the camera on SBC
+$ roslaunch turtlebot3_autorace_${Autorace_Misson}_camera turtlebot3_autorace_camera_pi.launch
+
+#Execute rqt_image_view on Remote PC
+$ rqt_image_view
+
+#Excute rqt_reconfigure on Remote PC
+$ rosrun rqt_reconfigure rqt_reconfigure
+
+#Write modified values to the file.
+```
+![image](https://user-images.githubusercontent.com/90145797/204715893-0041e938-8295-4865-b3da-b74e6854f88f.png)
+
+##### Intrinsic Camera Calibration
+```
+# Launch roscore on Remote PC & Trigger the camera on SBC
+$ roscore
+$ roslaunch turtlebot3_autorace_${Autorace_Misson}_camera turtlebot3_autorace_camera_pi.launch
+
+#Run a intrinsic camera calibration launch file on Remote PC
+$ export AUTO_IN_CALIB=calibration
+$ export GAZEBO_MODE=false
+$ roslaunch turtlebot3_autorace_${Autorace_Misson}_camera turtlebot3_autorace_intrinsic_camera_calibration.launch
+
+#UseD the checkerboard to calibrate the camera, and click CALIBRATE &  saved the intrinsic calibration data.
+
+```
+![image](https://user-images.githubusercontent.com/90145797/204716457-294dba1b-ab76-4c2e-bfb8-b0dcdff81872.png)
+![image](https://user-images.githubusercontent.com/90145797/204716473-b87e126e-5860-489f-bcec-8d10c6b59515.png)
+###### Copy and paste the data from ost.yaml to camerav2_320x240_30fps.yaml.
+![image](https://user-images.githubusercontent.com/90145797/204716682-d2bb7a76-7028-4a86-81b7-bdfbff94345e.png)
+
+##### Extrinsic Camera Calibration
+```
+#Launch roscore on Remote PC & Trigger the camera on SBC
+$ roslaunch turtlebot3_autorace_${Autorace_Misson}_camera turtlebot3_autorace_camera_pi.launch
+
+#Use the command on Remote PC
+$ export AUTO_IN_CALIB=action
+$ export GAZEBO_MODE=false
+$ roslaunch turtlebot3_autorace_${Autorace_Misson}_camera turtlebot3_autorace_intrinsic_camera_calibration.launch
+
+#Run the extrinsic camera calibration launch file on Remote PC & Execute rqt on Remote PC
+$ export AUTO_EX_CALIB=calibration
+$ roslaunch turtlebot3_autorace_${Autorace_Misson}_camera turtlebot3_autorace_extrinsic_camera_calibration.launch
+$ rqt
+
+#Excute rqt_reconfigure on Remote PC
+$ rosrun rqt_reconfigure rqt_reconfigure
+
+#rqt_reconfigure
+```
+![image](https://user-images.githubusercontent.com/90145797/204718001-1d7357db-1f32-444b-9c0f-0281a00e73b8.png)
+
+##### Checking Calibration Result
+```
+#Launch roscore on Remote PC & Trigger the camera on SBC
+#Run a intrinsic camera calibration launch file on Remote PC
+$ export AUTO_IN_CALIB=action
+$ roslaunch turtlebot3_autorace_${Autorace_Misson}_camera turtlebot3_autorace_intrinsic_camera_calibration.launch
+
+#Open terminal and use the command on Remote PC
+$ export AUTO_EX_CALIB=action
+$ roslaunch turtlebot3_autorace_${Autorace_Misson}_camera turtlebot3_autorace_extrinsic_camera_calibration.launch
+
+```
+
+##### Lane Detection
+```
+#Launch roscore on Remote PC & Trigger the camera on SBC
+#Run a intrinsic camera calibration launch file on Remote PC
+$ export AUTO_IN_CALIB=action
+$ export GAZEBO_MODE=false
+$ roslaunch turtlebot3_autorace_${Autorace_Misson}_camera turtlebot3_autorace_intrinsic_camera_calibration.launch
+
+#Execute rqt on Remote PC
+$ rqt
+```
+###### Image view of /detect/image_yellow_lane_marker/compressed topic
+![image](https://user-images.githubusercontent.com/90145797/204719281-d546b1f2-
+b883-446f-b4ee-b8ab6592d1ae.png)
+
+###### Image view of /detect/image_white_lane_marker/compressed topic
+![image](https://user-images.githubusercontent.com/90145797/204719356-263ac170-ff56-46dd-be95-0d768373ca5e.png)
+
+###### Open lane.yaml file & Open lane.yaml file 
+![image](https://user-images.githubusercontent.com/90145797/204719621-a61ec01b-ddd3-47bd-b49d-c0cb263c0b39.png)
+
+##### Traffic Sign Detection
+```
+#Execute rqt_image_view on Remote PC.
+$ rqt_image_view
+
+#Open terminal and use the command on Remote PC.
+$ roslaunch turtlebot3_autorace_${Autorace_Misson}_detect turtlebot3_autorace_detect_sign.launch
+
+#Open terminal and use the command on Remote PC.
+$ rqt_image_view
+```
+
+##### Missions & Traffic Lights Detection
+```
+3Open terminal and use the command on Remote PC.
+$ export AUTO_DT_CALIB=calibration
+$ roslaunch turtlebot3_autorace_traffic_light_detect turtlebot3_autorace_detect_traffic_light.launch
+
+#Excute rqt on Remote PC.
+rqt
+
+#Execute rqt_image_view.
+$ rqt_image_view
+```
+
+##### Running Traffic Light Mission
+```
+#Use the command on Remote PC.
+$ export AUTO_IN_CALIB=action
+$ export GAZEBO_MODE=false
+$ roslaunch turtlebot3_autorace_traffic_light_camera turtlebot3_autorace_intrinsic_camera_calibration.launch
+
+#Use the command on Remote PC.
+$ rostopic pub -1 /core/decided_mode std_msgs/UInt8 "data: 3"
+```
+
+##### Running Intersection Mission
+```
+#Use the command on Remote PC.
+$ export AUTO_IN_CALIB=action
+$ roslaunch turtlebot3_autorace_intersection_camera turtlebot3_autorace_intrinsic_camera_calibration.launch
+
+#Use the command on Remote PC.
+$ export AUTO_EX_CALIB=action
+$ export AUTO_DT_CALIB=action
+$ roslaunch turtlebot3_autorace_intersection_core turtlebot3_autorace_core.launch
+
+#Use the command on Remote PC.
+$ rostopic pub -1 /core/decided_mode std_msgs/UInt8 "data: 2"
+```
+
+##### Running Construction Mission
+```
+#Use the command on Remote PC.
+$ export AUTO_IN_CALIB=action
+$ export GAZEBO_MODE=false
+$ roslaunch turtlebot3_autorace_construction_camera turtlebot3_autorace_intrinsic_camera_calibration.launch
+
+#Use the command on Remote PC.
+$ export AUTO_EX_CALIB=action
+$ export AUTO_DT_CALIB=action
+$ roslaunch turtlebot3_autorace_construction_core turtlebot3_autorace_core.launch
+
+#Use the command on Remote PC.
+$ rostopic pub -1 /core/decided_mode std_msgs/UInt8 "data: 2"
+```
+
+##### Running Parking Mission
+```
+#Use the command on Remote PC.
+$ export AUTO_IN_CALIB=action
+$ export GAZEBO_MODE=false
+$ roslaunch turtlebot3_autorace_parking_camera turtlebot3_autorace_intrinsic_camera_calibration.launch
+
+#Use the command on Remote PC.
+$ export AUTO_EX_CALIB=action
+$ export AUTO_DT_CALIB=action
+$ roslaunch turtlebot3_autorace_parking_core turtlebot3_autorace_core.launch
+
+#Use the command on Remote PC.
+$ rostopic pub -1 /core/decided_mode std_msgs/UInt8 "data: 2"
+```
+
+##### Level Crossing Detection
+```
+#Use the command on Remote PC.
+$ export AUTO_DT_CALIB=calibration
+$ roslaunch turtlebot3_autorace_level_crossing_detect turtlebot3_autorace_detect_level.launch
+
+#Execute rqt
+$ rqt
+
+#Run a detect level lanuch file.
+$ export AUTO_DT_CALIB=action
+$ roslaunch turtlebot3_autorace_detect turtlebot3_autorace_detect_level.launch
+```
+
+##### Running Tunnel Mission
+```
+#Use the command on Remote PC.
+$ export AUTO_IN_CALIB=action
+$ export GAZEBO_MODE=false
+$ roslaunch turtlebot3_autorace_tunnel_camera turtlebot3_autorace_intrinsic_camera_calibration.launch
+
+#Use the command on Remote PC.
+$ export AUTO_EX_CALIB=action
+$ export AUTO_DT_CALIB=action
+$ export TURTLEBOT3_MODEL=burger
+$ roslaunch turtlebot3_autorace_tunnel_core turtlebot3_autorace_core.launch
+
+#Use the command on Remote PC.
+$ rostopic pub -1 /core/decided_mode std_msgs/UInt8 "data: 2"
 ```
